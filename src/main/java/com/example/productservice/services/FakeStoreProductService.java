@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("fakeStoreService")
 public class FakeStoreProductService implements ProductService {
 
     private RestTemplate restTemplate;
@@ -57,5 +57,10 @@ public class FakeStoreProductService implements ProductService {
                 FakeStoreProductResponseDto.class
         );
         return responseDto.toProduct();
+    }
+
+    @Override
+    public Product partialUpdate(Long id, Product product) throws ProductNotFoundException {
+        return null;
     }
 }

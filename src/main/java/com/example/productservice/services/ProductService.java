@@ -14,4 +14,6 @@ public interface ProductService {
     public List<Product> getAllProducts();
 
     public Product createProduct(ProductRequestDto productRequestDto);
+
+    public Product partialUpdate(Long id, Product product) throws ProductNotFoundException;
 }
