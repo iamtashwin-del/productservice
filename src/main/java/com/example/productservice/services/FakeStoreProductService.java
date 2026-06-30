@@ -3,7 +3,6 @@ package com.example.productservice.services;
 import com.example.productservice.Dtos.FakeStoreProductRequestDto;
 import com.example.productservice.Dtos.FakeStoreProductResponseDto;
 import com.example.productservice.Dtos.ProductRequestDto;
-import com.example.productservice.Dtos.ProductResponseDto;
 import com.example.productservice.ProductNotFoundException;
 import com.example.productservice.models.Product;
 import org.springframework.stereotype.Service;
@@ -62,5 +61,10 @@ public class FakeStoreProductService implements ProductService {
     @Override
     public Product partialUpdate(Long id, Product product) throws ProductNotFoundException {
         return null;
+    }
+
+    @Override
+    public Integer deleteProduct(Integer id) {
+        return 0;
     }
 }

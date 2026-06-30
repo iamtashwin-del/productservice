@@ -2,7 +2,10 @@ package com.example.productservice.controllers;
 
 import com.example.productservice.Dtos.ProductRequestDto;
 import com.example.productservice.Dtos.ProductResponseDto;
+import com.example.productservice.Dtos.UserDto;
+import com.example.productservice.InvalidTokenException;
 import com.example.productservice.ProductNotFoundException;
+import com.example.productservice.clients.UserServiceClient;
 import com.example.productservice.models.Product;
 import com.example.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,14 +20,19 @@ import java.util.List;
 public class ProductController {
 
     private ProductService productService;
+    private UserServiceClient userServiceClient;
 
-    public ProductController(@Qualifier("productDbService")ProductService productService) {
+    public ProductController(@Qualifier("productDbService")ProductService productService,  UserServiceClient userServiceClient) {
         this.productService = productService;
+        this.userServiceClient = userServiceClient;
     }
 
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) throws ProductNotFoundException {
+    public ResponseEntity<ProductResponseDto> getProductById
+            (@PathVariable Long id, @RequestHeader("Authorization") String token)
+            throws ProductNotFoundException, InvalidTokenException {
+        UserDto userDto = userServiceClient.validateToken(token);
         Product product = productService.getProductById(id);
         ResponseEntity<ProductResponseDto>  responseEntity = new ResponseEntity<>(ProductResponseDto.from(product), HttpStatus.OK);
         return responseEntity;
@@ -57,4 +65,9 @@ public class ProductController {
         return responseEntity;
     }
 
+    @DeleteMapping("product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Integer id) throws ProductNotFoundException {
+        productService.deleteProduct(id);
+        return new ResponseEntity<>("PRODUCT DELETED",HttpStatus.OK);
+    }
 }

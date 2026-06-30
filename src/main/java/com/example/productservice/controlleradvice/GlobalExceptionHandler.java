@@ -1,6 +1,7 @@
 package com.example.productservice.controlleradvice;
 
 import com.example.productservice.Dtos.ErrorDto;
+import com.example.productservice.InvalidTokenException;
 import com.example.productservice.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,15 @@ public class GlobalExceptionHandler {
         errorDto.setMessage(exception.getMessage());
         errorDto.setError("FAILURE");
         ResponseEntity<ErrorDto> response = new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+        return response;
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ErrorDto> handleException(InvalidTokenException exception){
+        ErrorDto errorDto = new ErrorDto();
+        errorDto.setMessage(exception.getMessage());
+        errorDto.setError("FAILURE");
+        ResponseEntity<ErrorDto> response = new ResponseEntity<>(errorDto, HttpStatus.UNAUTHORIZED);
         return response;
     }
 }

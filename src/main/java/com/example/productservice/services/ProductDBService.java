@@ -6,6 +6,7 @@ import com.example.productservice.models.Category;
 import com.example.productservice.models.Product;
 import com.example.productservice.repositories.CategoryRepository;
 import com.example.productservice.repositories.ProductRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -69,6 +70,13 @@ public class ProductDBService implements ProductService {
             optionalProduct.get().setDescription(product.getDescription());
         }
         return productRepository.save(optionalProduct.get());
+    }
+
+    @Override
+    @Transactional
+    public Integer deleteProduct(Integer id) throws ProductNotFoundException {
+        Product product = getProductById(Long.valueOf(id));
+        return productRepository.deleteProduct(id);
     }
 
     private Category getCategoryFromDB(String categoryName){
